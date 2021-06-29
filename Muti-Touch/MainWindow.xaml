@@ -6,9 +6,9 @@
     <Grid x:Name="windowGrid">
         <DockPanel x:Name="dock">
             <StackPanel DockPanel.Dock="Bottom">
-                <Button Height="60" Margin="20 0" Content="add" Click="Button_Click" Name="addAdorner"/>
-                <Button Height="60" Margin="20 0" Content="select/ink" Click="canvasModeChange_Click" Name="canvasModeChange" />
-                <Button Height="60" Margin="20 0" Content="Transform" Click="btnRotate_Click" Name="btnRotate" />
+                <Button Height="60" Margin="20 0" Content="添加装饰器" Click="Button_Click" Name="addAdorner"/>
+                <Button Height="60" Margin="20 0" Content="切换编辑模式select/ink" Click="canvasModeChange_Click" Name="canvasModeChange" />
+                <Button Height="60" Margin="20 0" Content="切换为none以选中笔迹" Click="btnRotate_Click" Name="btnRotate" />
                 <!--<Image Source="/img/test.gif" Height="100"/>-->
                 <!--<Image gif:ImageBehavior.AnimatedSource="/img/test.gif" Height="350" />-->
             </StackPanel>
