@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muti-Touch", "Muti-Touch\Muti-Touch.csproj", "{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}.Debug|x86.Build.0 = Debug|Any CPU
+		{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{003BD61D-E61E-467E-A5C7-036B1FD2E5C5}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B51676CB-2A7B-4AA4-9749-AD345F8B807C}
+	EndGlobalSection
+EndGlobal
