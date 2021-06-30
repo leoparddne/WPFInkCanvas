@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Muti_Touch.Enum;
+using Muti_Touch.Util;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,11 +18,18 @@ namespace Muti_Touch
     {
         List<Point> paths = new List<Point>();
         LassoAdorner lasso;
+
+        //绘制模式
+        CanvasEditMode BlackMode = CanvasEditMode.WRITE;
+
+        //绘制形状预览
+        private PreviewAdorner previewAdorner;
         public MainWindow()
         {
             InitializeComponent();
 
             lasso = new LassoAdorner(writeBorad);
+            previewAdorner = new PreviewAdorner(writeBorad);
         }
         private void image_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
         {
@@ -141,17 +151,49 @@ namespace Muti_Touch
         }
 
         double scaleSize = 1;
+        //绘制形状
+        private void DrawSharp(MouseEventArgs e)
+        {
+            if (!mouseDown)
+            {
+                return;
+            }
+            SolidColorBrush renderBrush = new SolidColorBrush(Colors.Green);
+            //renderBrush.Opacity = 0.5;
 
+            Pen renderPen = new Pen(new SolidColorBrush(Colors.Yellow), 2);
+            Point mousePoint = e.GetPosition(canvasGrid);
+
+            previewAdorner.InjectRenderCallback((DrawingContext context) =>
+            {
+                //var tri = d.Triangle(startPoint, mousePoint, new Point(mousePoint.X-300, mousePoint.Y));
+                context.DrawRectangle(renderBrush, renderPen, new Rect(startPoint, mousePoint));
+            });
+
+            previewAdorner.ReDraw();
+
+
+        }
         private void writeBorad_MouseMove(object sender, MouseEventArgs e)
         {
             if (mouseDown)
             {
-                paths.Add(e.GetPosition(writeBorad));
-                if(writeBorad.EditingMode== InkCanvasEditingMode.None)
+                //TODO 需要计算当前的模式而不是通过复杂的判断
+                if (CanvasEditMode.WRITE_SHARP == BlackMode)
                 {
-                    lasso.AddPoint(e.GetPosition(writeBorad));
+                    DrawSharp(e);
+                }
+                else
+                {
+                    paths.Add(e.GetPosition(writeBorad));
+                    if (writeBorad.EditingMode == InkCanvasEditingMode.None)
+                    {
+                        lasso.AddPoint(e.GetPosition(writeBorad));
+                    }
                 }
             }
+
+            
 
             movein = true;
             if (pressBlank && (!loadhand) && movein)
@@ -256,6 +298,36 @@ namespace Muti_Touch
         private void writeBorad_MouseUp(object sender, MouseButtonEventArgs e)
         {
             lasso.ClearPoint();
+            mouseDown = false;
+
+            if (BlackMode == CanvasEditMode.WRITE_SHARP)
+            {
+                Draw d = new Draw(writeBorad);
+                Point mousePoint = e.GetPosition(canvasGrid);
+
+                //三角形
+                //var stroke = d.Triangle(startPoint, mousePoint, new Point(mousePoint.X-300, mousePoint.Y));
+
+                //矩形
+                var stroke = d.Rectangle(startPoint, mousePoint);
+
+                //椭圆
+                //var stroke = d.Circle(new StylusPoint(startPoint.X, startPoint.Y), new StylusPoint(mousePoint.X, mousePoint.Y));
+                //var stroke = d.Circle(startPoint, mousePoint);
+
+
+                //var stroke = d.Line(startPoint, mousePoint);
+
+
+                //writeBorad.Strokes.Clear();
+                writeBorad.Strokes.Add(stroke);
+                //清空
+                previewAdorner.InjectRenderCallback(null);
+                previewAdorner.ReDraw();
+
+                return;
+            }
+
             if (writeBorad.EditingMode == InkCanvasEditingMode.None)
             {
                 writeBorad.ReleaseMouseCapture();
@@ -294,7 +366,6 @@ namespace Muti_Touch
                 }
             }
 
-            mouseDown = false;
         }
 
         bool add = true;
@@ -375,6 +446,36 @@ namespace Muti_Touch
         private void writeBorad_MouseMove_1(object sender, MouseEventArgs e)
         {
 
+        }
+
+        private void writeBorad_EditingModeChanged(object sender, RoutedEventArgs e)
+        {
+            switch (writeBorad.EditingMode)
+            {
+                case InkCanvasEditingMode.None:
+                    break;
+                case InkCanvasEditingMode.Ink:
+                    BlackMode = CanvasEditMode.WRITE;
+                    break;
+                case InkCanvasEditingMode.GestureOnly:
+                    break;
+                case InkCanvasEditingMode.InkAndGesture:
+                    break;
+                case InkCanvasEditingMode.Select:
+                    break;
+                case InkCanvasEditingMode.EraseByPoint:
+                    break;
+                case InkCanvasEditingMode.EraseByStroke:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void btnEll_Click(object sender, RoutedEventArgs e)
+        {
+            BlackMode = CanvasEditMode.WRITE_SHARP;
+            writeBorad.EditingMode = InkCanvasEditingMode.None;
         }
     }
 }
