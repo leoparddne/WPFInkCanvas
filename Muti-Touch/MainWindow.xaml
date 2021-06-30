@@ -15,12 +15,12 @@
             <Grid x:Name="canvasGrid" MouseWheel="writeBorad_MouseWheel">
                 <!--<ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled">
             <ContentControl>-->
-                <InkCanvas x:Name="writeBorad" ManipulationStarting="image_ManipulationStarting"
+                <InkCanvas x:Name="writeBorad" ManipulationStarting="image_ManipulationStarting" 
                         ManipulationDelta="image_ManipulationDelta" ManipulationCompleted="image_ManipulationCompleted"
                         MouseWheel="writeBorad_MouseWheel" Background="#ccc" EditingMode="Ink"
                         MouseMove="writeBorad_MouseMove" MouseLeave="writeBorad_MouseLeave"
                         PreviewMouseDown="writeBorad_MouseDown" MouseDown="writeBorad_MouseDown"
-                        MouseUp="writeBorad_MouseUp" SelectionChanged="writeBorad_SelectionChanged" SelectionChanging="writeBorad_SelectionChanging"
+                        MouseUp="writeBorad_MouseUp" SelectionChanged="writeBorad_SelectionChanged" 
                         SelectionMoved="writeBorad_SelectionMoved" SelectionResized="writeBorad_SelectionResized"
                            >
                     <Image Canvas.Top="52" Canvas.Left="34" Width="20" IsManipulationEnabled="True" Source="/img/3.png"></Image>

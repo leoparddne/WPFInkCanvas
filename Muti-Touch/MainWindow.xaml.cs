@@ -142,7 +142,10 @@ namespace Muti_Touch
 
         private void writeBorad_MouseMove(object sender, MouseEventArgs e)
         {
-            paths.Add(e.GetPosition(writeBorad));
+            if (mouseDown)
+            {
+                paths.Add(e.GetPosition(writeBorad));
+            }
 
             movein = true;
             if (pressBlank && (!loadhand) && movein)
@@ -265,8 +268,14 @@ namespace Muti_Touch
                         selectionStrokes.Add(item);
                     }
                 }
-
-                adorner = new MoveRotateAdorner(writeBorad, selectionStrokes);
+                if (paths.Count == 0)
+                {
+                    return;
+                }
+                adorner = new MoveRotateAdorner(writeBorad, selectionStrokes, () =>
+                 {
+                     paths.Clear();
+                 });
 
                 if (selectionStrokes.Count == 0)
                 {
@@ -326,18 +335,18 @@ namespace Muti_Touch
         {
             //writeBorad.EditingMode = InkCanvasEditingMode.None;
 
-            var selectionStrokes = writeBorad.GetSelectedStrokes();
+            //var selectionStrokes = writeBorad.GetSelectedStrokes();
 
-            adorner = new MoveRotateAdorner(writeBorad, selectionStrokes);
+            //adorner = new MoveRotateAdorner(writeBorad, selectionStrokes);
 
-            if (selectionStrokes.Count == 0)
-            {
-                adorner?.ClearAdorner();
-            }
-            else
-            {
-                adorner?.ReDraw();
-            }
+            //if (selectionStrokes.Count == 0)
+            //{
+            //    adorner?.ClearAdorner();
+            //}
+            //else
+            //{
+            //    adorner?.ReDraw();
+            //}
         }
 
         private void btnRotate_Click(object sender, RoutedEventArgs e)
@@ -354,11 +363,7 @@ namespace Muti_Touch
             adorner?.ReDraw();
         }
 
-        private void writeBorad_SelectionChanging(object sender, InkCanvasSelectionChangingEventArgs e)
-        {
-            var selectionStrokes = writeBorad.GetSelectedStrokes();
 
-        }
 
         private void writeBorad_MouseMove_1(object sender, MouseEventArgs e)
         {

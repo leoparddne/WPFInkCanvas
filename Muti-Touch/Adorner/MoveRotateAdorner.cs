@@ -6,6 +6,7 @@ using System.Windows.Documents;
 using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Muti_Touch
 {
@@ -41,9 +42,11 @@ namespace Muti_Touch
 
         private MoveRotateAdornerConfig selectAnchor = null;
 
+        Action closeCallback;
 
-        public MoveRotateAdorner(UIElement adornedElement, StrokeCollection selectionStrokes = null) : base(adornedElement)
+        public MoveRotateAdorner(UIElement adornedElement, StrokeCollection selectionStrokes = null, Action closeCallback = null) : base(adornedElement)
         {
+            this.closeCallback = closeCallback;
             this.adornedElement = adornedElement;
             if ((selectionStrokes?.Count ?? 0) > 0)
             {
@@ -72,6 +75,7 @@ namespace Muti_Touch
             if (closeGeometry.Bounds.Contains(mousePosition))
             {
                 this.ClearAdorner();
+                closeCallback?.Invoke();
             }
             else
             {
@@ -116,9 +120,6 @@ namespace Muti_Touch
 
                 Rotate(angle - lastAngle);
                 lastAngle = angle;
-
-                this.Visibility = Visibility.Hidden;
-                this.Visibility = Visibility.Visible;
 
                 Trace.WriteLine($"x:{x},y:{y},angle:{angle}");
 
@@ -239,7 +240,7 @@ namespace Muti_Touch
             //绘制边框
             DrawBorder(drawingContext, adornedElementRect);
 
-            const double ellipseSize = 10;
+            const double ellipseSize = 28;
             DrawCloseAndRotate(drawingContext, adornedElementRect, ellipseSize, ellipseSize);
 
             base.OnRender(drawingContext);
@@ -258,8 +259,12 @@ namespace Muti_Touch
         private void DrawCloseAndRotate(DrawingContext drawingContext, Rect adornedElementRect, double width, double height)
         {
             const double margin = 10;
+            double imgsize = 20;
             closeGeometry = DrawEllipse(drawingContext, adornedElementRect.Left + Center.X, adornedElementRect.Top - margin, width, height, Colors.Red);
             rotateGeometry = DrawEllipse(drawingContext, adornedElementRect.Left + Center.X, adornedElementRect.Top + adornedElementRect.Height + margin, width, height, Colors.LightBlue);
+
+            DrawImg(drawingContext, adornedElementRect.Left + Center.X, adornedElementRect.Top - margin, imgsize, imgsize, "pack://application:,,,/img/btn_close.png");
+            DrawImg(drawingContext, adornedElementRect.Left + Center.X, adornedElementRect.Top + adornedElementRect.Height + margin, imgsize, imgsize, "pack://application:,,,/img/btn_xuanzhuan.png");
 
         }
 
@@ -274,7 +279,24 @@ namespace Muti_Touch
             Pen renderPen = new Pen(new SolidColorBrush(Colors.Transparent), 1.5);
 
             var ellGeometry = new EllipseGeometry(new Point(x, y), width, height);
+            //drawingContext.DrawGeometry(renderBrush, renderPen, ellGeometry);
             drawingContext.DrawGeometry(renderBrush, renderPen, ellGeometry);
+
+
+            return ellGeometry;
+        }
+        private EllipseGeometry DrawImg(DrawingContext drawingContext, double x, double y, double width, double height, string img = null)
+        {
+            //ImageSource imageSource = new BitmapImage(new Uri("pack://application:,,,/img/1.png"));
+            ImageSource imageSource = new BitmapImage(new Uri(img));
+
+            ImageBrush imageBrush = new ImageBrush(imageSource);
+
+            Pen renderPen = new Pen(new SolidColorBrush(Colors.Transparent), 1.5);
+
+            var ellGeometry = new EllipseGeometry(new Point(x, y), width, height);
+            //drawingContext.DrawGeometry(renderBrush, renderPen, ellGeometry);
+            drawingContext.DrawGeometry(imageBrush, renderPen, ellGeometry);
 
             return ellGeometry;
         }
@@ -468,7 +490,7 @@ namespace Muti_Touch
         {
             var layer = AdornerLayer.GetAdornerLayer(adornedElement);
 
-            adorner = adorner ?? new MoveRotateAdorner(adornedElement, selectionStrokes);
+            adorner = adorner ?? new MoveRotateAdorner(adornedElement, selectionStrokes,this.closeCallback);
             layer.Add(adorner);
             return adorner;
         }
