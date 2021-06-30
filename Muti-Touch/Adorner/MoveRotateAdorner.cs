@@ -303,7 +303,7 @@ namespace Muti_Touch
 
 
         /// <summary>
-        /// 绘制调整大小的六个锚点
+        /// 绘制调整大小的锚点
         /// </summary>
         /// <param name="drawingContext"></param>
         /// <param name="adornedElementRect"></param>
@@ -311,6 +311,9 @@ namespace Muti_Touch
         /// <returns></returns>
         private Rect DrawChangeSizeAnchor(DrawingContext drawingContext, Rect adornedElementRect, double rectSize)
         {
+            //清空锚点避免重绘后定位未发生变化导致的影响
+            anchors.Clear();
+
             ///绘制四个角落顶点
             DrawRect(drawingContext, adornedElementRect.Right, adornedElementRect.Bottom, rectSize, rectSize, true, true, adornedElementRect.TopLeft);
             DrawRect(drawingContext, adornedElementRect.Right, adornedElementRect.Top, rectSize, rectSize, true, false, adornedElementRect.BottomLeft);
