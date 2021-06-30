@@ -14,10 +14,12 @@ namespace Muti_Touch
     public partial class MainWindow : Window
     {
         List<Point> paths = new List<Point>();
-
+        LassoAdorner lasso;
         public MainWindow()
         {
             InitializeComponent();
+
+            lasso = new LassoAdorner(writeBorad);
         }
         private void image_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
         {
@@ -145,6 +147,10 @@ namespace Muti_Touch
             if (mouseDown)
             {
                 paths.Add(e.GetPosition(writeBorad));
+                if(writeBorad.EditingMode== InkCanvasEditingMode.None)
+                {
+                    lasso.AddPoint(e.GetPosition(writeBorad));
+                }
             }
 
             movein = true;
@@ -249,6 +255,7 @@ namespace Muti_Touch
 
         private void writeBorad_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            lasso.ClearPoint();
             if (writeBorad.EditingMode == InkCanvasEditingMode.None)
             {
                 writeBorad.ReleaseMouseCapture();
